@@ -18,7 +18,7 @@ gem "stimulus-rails"
 gem "jbuilder"
 # Gemfile
 gem "react-rails"
-gem "graphql-client", "~> 0.18.0"  # For Monday.com GraphQL API
+gem "graphql-client", "~> 0.25.0"  # For Monday.com GraphQL API
 gem "dotenv-rails", groups: [ :development, :test ]
 gem "kaminari"
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
