@@ -1,0 +1,76 @@
+<h1>Monday.com Boards</h1>
+
+<% if @boards.any? %>
+  <div class="boards-grid">
+    <% @boards.each do |board| %>
+      <div class="board-card">
+        <h2><%= board["name"] %></h2>
+        
+        <% if board["columns"].any? %>
+          <div class="board-columns">
+            <h3>Columns:</h3>
+            <ul>
+              <% board["columns"].each do |column| %>
+                <li><%= column["title"] %> (<%= column["type"] %>)</li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <% if board["groups"].any? %>
+          <div class="board-groups">
+            <h3>Groups:</h3>
+            <ul>
+              <% board["groups"].each do |group| %>
+                <li><%= group["title"] %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <p>No boards found. Please check your Monday.com API token and permissions.</p>
+<% end %>
+
+<style>
+  .boards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+  }
+
+  .board-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .board-card h2 {
+    margin-top: 0;
+    color: #333;
+  }
+
+  .board-columns, .board-groups {
+    margin-top: 15px;
+  }
+
+  .board-columns h3, .board-groups h3 {
+    margin-bottom: 10px;
+    font-size: 1.1em;
+  }
+
+  .board-columns ul, .board-groups ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .board-columns li, .board-groups li {
+    padding: 5px 0;
+    color: #666;
+  }
+</style>

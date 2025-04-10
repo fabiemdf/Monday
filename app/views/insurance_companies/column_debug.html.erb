@@ -1,0 +1,63 @@
+<!-- app/views/insurance_companies/column_debug.html.erb -->
+<!-- Use this file for debugging column IDs - access at /insurance_companies/columns -->
+<div class="container mt-4">
+  <h1 class="mb-4">Column Mapping Debug - Insurance Companies</h1>
+
+  <% if @companies.present? && @companies.is_a?(Hash) && @companies.dig("data", "boards", 0, "items_page", "items").present? %>
+    <div class="alert alert-info">
+      <p>This page shows all available columns from Monday.com to help map them correctly.</p>
+    </div>
+    
+    <% items = @companies.dig("data", "boards", 0, "items_page", "items") %>
+    
+    <% if items.any? %>
+      <div class="card">
+        <div class="card-header">
+          <h3>First Item: <%= items.first["name"] %></h3>
+        </div>
+        <div class="card-body">
+          <h4>All Column Values:</h4>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Column ID</th>
+                  <th>Type</th>
+                  <th>Text</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% items.first["column_values"].each do |column| %>
+                  <tr>
+                    <td><code><%= column["id"] %></code></td>
+                    <td><%= column["type"] %></td>
+                    <td><%= column["text"] %></td>
+                    <td>
+                      <% if column["value"].present? %>
+                        <pre class="mb-0"><%= JSON.pretty_generate(JSON.parse(column["value"])) rescue column["value"] %></pre>
+                      <% else %>
+                        <em>empty</em>
+                      <% end %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="alert alert-warning">
+      <p>No insurance companies data available. Please make sure you have insurance companies in your Monday.com board.</p>
+      <p>Also, check that <code>8792259332</code> environment variable is correctly set in your application.</p>
+    </div>
+  <% end %>
+  
+  <div class="mt-4">
+    <%= link_to insurance_companies_path, class: "btn btn-primary" do %>
+      <i class="bi bi-arrow-left"></i> Back to Insurance Companies
+    <% end %>
+  </div>
+</div>

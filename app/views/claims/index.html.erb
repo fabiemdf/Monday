@@ -1,0 +1,77 @@
+<!-- app/views/claims/index.html.erb -->
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Claims</h1>
+    <%= link_to "New Claim", new_claim_path, class: "btn btn-primary" %>
+  </div>
+
+  <% if @claims.present? %>
+    <% if @claims["groups"].present? %>
+      <% if @claims["items_page"].present? && @claims["items_page"]["items"].present? %>
+        <% @claims["groups"].each do |group| %>
+          <div class="claim-group">
+            <h2><%= group["title"] %></h2>
+            
+            <% group_items = @claims["items_page"]["items"].select do |item|
+                 # Need to match items to groups - this might need adjustment based on your data structure
+                 true # For now, showing all items in all groups
+               end 
+            %>
+            
+            <% if group_items.any? %>
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>File Number</th>
+                    <th>Claim Number</th>
+                    <th>Policy Number</th>
+                    <th>Date of Loss</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% group_items.each do |item| %>
+                    <tr>
+                      <td><%= item["name"] %></td>
+                      <td><%= get_column_value(item, "Status") %></td>
+                      <td><%= get_column_value(item, "File Number") %></td>
+                      <td><%= get_column_value(item, "Claim Number") %></td>
+                      <td><%= get_column_value(item, "Policy Number") %></td>
+                      <td><%= get_column_value(item, "Date of Loss") %></td>
+                      <td>
+                        <%= link_to "View", claim_path(item["id"]), class: "btn btn-sm btn-primary" %>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            <% else %>
+              <p>No claims in this group.</p>
+            <% end %>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="alert alert-info">No items found in the Claims board.</div>
+      <% end %>
+    <% else %>
+      <div class="alert alert-info">No groups found in the Claims board.</div>
+    <% end %>
+  <% else %>
+    <div class="alert alert-info">Claims board not found or is empty.</div>
+  <% end %>
+</div>
+
+<%# Debug output %>
+<pre><%= JSON.pretty_generate(@claims) if @claims.present? %></pre>
+
+<%# Temporarily commented out React integration
+<div id="root">
+  <%# React will render here %>
+</div>
+
+<script type="application/json" id="initial-data">
+  <%= raw @claims.to_json %>
+</script>
+%>

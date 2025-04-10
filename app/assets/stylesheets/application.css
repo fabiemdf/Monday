@@ -1,0 +1,189 @@
+/*
+ * This is a manifest file that'll be compiled into application.css.
+ *
+ * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
+ * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
+ * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
+ * depending on specificity.
+ *
+ * Consider organizing styles into separate files for maintainability.
+ */
+
+/* Application styles */
+
+/* Header and Navigation Styles */
+.icon-nav {
+  font-size: 0.9rem;
+}
+
+.icon-nav a {
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+}
+
+.icon-nav a:hover {
+  opacity: 0.8;
+}
+
+.custom-logo {
+  max-height: 40px;
+  width: auto;
+}
+
+.custom-logo-large {
+  max-height: 50px;
+  width: auto;
+}
+
+.navbar {
+  padding: 0.5rem 0;
+}
+
+.navbar-brand {
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.nav-link {
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+}
+
+.nav-link i {
+  margin-right: 0.5rem;
+}
+
+.dropdown-menu {
+  border: none;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  padding: 0.5rem 0;
+}
+
+.dropdown-item {
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+}
+
+.dropdown-item i {
+  margin-right: 0.5rem;
+  width: 1.2rem;
+  text-align: center;
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa;
+}
+
+.dropdown-divider {
+  margin: 0.5rem 0;
+}
+
+/* Modal Styles */
+.modal-content {
+  border: none;
+  border-radius: 0.5rem;
+}
+
+.modal-header {
+  border-bottom: 1px solid #dee2e6;
+  padding: 1rem 1.5rem;
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.modal-body h6 {
+  margin-bottom: 1rem;
+}
+
+/* Responsive Styles */
+@media (max-width: 991.98px) {
+  .icon-nav {
+    font-size: 0.8rem;
+  }
+  
+  .navbar-collapse {
+    background-color: #343a40;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  
+  .dropdown-menu {
+    background-color: transparent;
+    box-shadow: none;
+    padding-left: 1rem;
+  }
+  
+  .dropdown-item {
+    color: #fff;
+  }
+  
+  .dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* Existing styles */
+.client-group {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+}
+
+.client-group h2 {
+  color: #333;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #007bff;
+}
+
+.table-responsive {
+  margin-bottom: 1rem;
+}
+
+.table th {
+  background-color: #f8f9fa;
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+}
+
+.me-2 {
+  margin-right: 0.5rem;
+}
+
+.alert {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+
+.alert-info {
+  color: #0c5460;
+  background-color: #d1ecf1;
+  border-color: #bee5eb;
+}
+
+.alert-danger {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+
+.container {
+  padding: 1rem;
+}
+
+.mt-4 {
+  margin-top: 1.5rem;
+}
+
+.mb-4 {
+  margin-bottom: 1.5rem;
+}

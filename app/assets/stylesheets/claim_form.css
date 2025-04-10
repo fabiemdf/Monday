@@ -1,0 +1,82 @@
+/* app/assets/stylesheets/claim_form.css */
+
+/* Form styling */
+.claim-form label.form-label {
+    font-size: 0.9rem;
+  }
+  
+  .claim-form .input-group {
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .claim-form .input-group:focus-within {
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+  }
+  
+  /* Field indicator styling */
+  .field-indicator {
+    width: 38px;
+    background-color: #f8f9fa;
+    border-color: #ced4da;
+  }
+  
+  .field-indicator i {
+    font-size: 0.8rem;
+  }
+  
+  /* Status badge styling */
+  #status_preview {
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+  }
+  
+  /* Save button effects */
+  #save-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+  }
+  
+  #save-button:not(:disabled):hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Animation for showing changes */
+  @keyframes highlight {
+    0% { background-color: rgba(255, 243, 205, 0); }
+    50% { background-color: rgba(255, 243, 205, 1); }
+    100% { background-color: rgba(255, 243, 205, 0); }
+  }
+  
+  .highlight-change {
+    animation: highlight 1.5s ease;
+  }
+  
+  /* Tooltip styles */
+  .tooltip-inner {
+    max-width: 200px;
+    padding: 6px 8px;
+    color: #fff;
+    text-align: center;
+    background-color: #000;
+    border-radius: 0.25rem;
+  }
+  
+  /* Card header styling */
+  .card-header h5 {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  
+  /* Form sections */
+  .form-section {
+    padding: 1.5rem;
+    background-color: #f8f9fa;
+    border-radius: 0.25rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Small text styling */
+  .text-muted {
+    font-size: 0.8rem;
+  }

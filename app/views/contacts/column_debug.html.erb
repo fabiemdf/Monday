@@ -1,0 +1,61 @@
+<!-- app/views/contacts/column_debug.html.erb -->
+<div class="container mt-4">
+  <h1 class="mb-4">Contact Column Mapping Debug</h1>
+
+  <% if @contacts.present? && @contacts.is_a?(Hash) && @contacts.dig("data", "boards", 0, "items_page", "items").present? %>
+    <div class="alert alert-info">
+      <p>This page shows all available columns from Monday.com to help map them correctly.</p>
+    </div>
+    
+    <% items = @contacts.dig("data", "boards", 0, "items_page", "items") %>
+    
+    <% if items.any? %>
+      <div class="card">
+        <div class="card-header">
+          <h3>First Item: <%= items.first["name"] %></h3>
+        </div>
+        <div class="card-body">
+          <h4>All Column Values:</h4>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Column ID</th>
+                  <th>Type</th>
+                  <th>Text</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% items.first["column_values"].each do |column| %>
+                  <tr>
+                    <td><code><%= column["id"] %></code></td>
+                    <td><%= column["type"] %></td>
+                    <td><%= column["text"] %></td>
+                    <td>
+                      <% if column["value"].present? %>
+                        <pre class="mb-0"><%= JSON.pretty_generate(JSON.parse(column["value"])) rescue column["value"] %></pre>
+                      <% else %>
+                        <em>empty</em>
+                      <% end %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="alert alert-warning">
+      No contacts data available. Please make sure you have contacts in your Monday.com board.
+    </div>
+  <% end %>
+  
+  <div class="mt-4">
+    <%= link_to contacts_path, class: "btn btn-primary" do %>
+      <i class="bi bi-arrow-left"></i> Back to Contacts
+    <% end %>
+  </div>
+</div>

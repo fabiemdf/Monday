@@ -1,0 +1,154 @@
+<!-- app/views/shared/_header.html.erb -->
+<header>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="<%= root_path %>" data-turbo="false">
+        MDF Public Adjuster
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <!-- Home Link -->
+          <li class="nav-item">
+            <%= link_to root_path, class: "nav-link #{current_page?(root_path) ? 'active' : ''}", 'data-turbo': 'false' do %>
+              <i class="bi bi-house-door"></i> Home
+            <% end %>
+          </li>
+          
+          <!-- Views Dropdown -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="viewsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-table"></i> Views
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="viewsDropdown">
+              <li>
+                <%= link_to claims_path, class: "dropdown-item", 'data-turbo': 'false' do %>
+                  <i class="bi bi-file-text"></i> Claims
+                <% end %>
+              </li>
+              <li>
+                <%= link_to clients_path, class: "dropdown-item", 'data-turbo': 'false' do %>
+                  <i class="bi bi-person"></i> Clients
+                <% end %>
+              </li>
+              <li>
+                <%= link_to insurance_companies_path, class: "dropdown-item", 'data-turbo': 'false' do %>
+                  <i class="bi bi-building"></i> Insurance Companies
+                <% end %>
+              </li>
+              <li>
+                <%= link_to contacts_path, class: "dropdown-item", 'data-turbo': 'false' do %>
+                  <i class="bi bi-people"></i> Contacts
+                <% end %>
+              </li>
+              <li>
+                <%= link_to leads_path, class: "dropdown-item", 'data-turbo': 'false' do %>
+                  <i class="bi bi-funnel"></i> Leads
+                <% end %>
+              </li>
+              <li>
+                <%= link_to documents_path, class: "dropdown-item", 'data-turbo': 'false' do %>
+                  <i class="bi bi-file-earmark"></i> Documents
+                <% end %>
+              </li>
+            </ul>
+          </li>
+          
+          <!-- New Dropdown -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="newDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-plus-circle"></i> New
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="newDropdown">
+              <li>
+                <%= link_to new_claim_path, class: "dropdown-item", 'data-turbo': 'false' do %>
+                  <i class="bi bi-file-text"></i> New Claim
+                <% end %>
+              </li>
+              <li>
+                <a href="https://mdf-public-adjuster.monday.com/boards/8792441338/views/187312049" class="dropdown-item" target="_blank">
+                  <i class="bi bi-person"></i> New Client
+                </a>
+              </li>
+              <li>
+                <a href="https://mdf-public-adjuster.monday.com/boards/8792441338/views/187312049" class="dropdown-item" target="_blank">
+                  <i class="bi bi-building"></i> New Insurance Company
+                </a>
+              </li>
+              <li>
+                <a href="https://mdf-public-adjuster.monday.com/boards/8792441338/views/187312049" class="dropdown-item" target="_blank">
+                  <i class="bi bi-people"></i> New Contact
+                </a>
+              </li>
+              <li>
+                <a href="https://mdf-public-adjuster.monday.com/boards/8778422410/views/187312049" class="dropdown-item" target="_blank">
+                  <i class="bi bi-funnel"></i> New Lead
+                </a>
+              </li>
+              <li>
+                <a href="https://mdf-public-adjuster.monday.com/boards/8769212922/views/187312049" class="dropdown-item" target="_blank">
+                  <i class="bi bi-file-earmark"></i> New Document
+                </a>
+              </li>
+            </ul>
+          </li>
+          
+          <!-- Edit Dropdown -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="editDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-pencil-square"></i> Edit
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="editDropdown">
+              <li>
+                <a href="https://mdf-public-adjuster.monday.com/boards/8768944596/" class="dropdown-item" target="_blank">
+                  <i class="bi bi-file-text"></i> Edit Claims
+                </a>
+              </li>
+              <li>
+                <a href="https://mdf-public-adjuster.monday.com/boards/8792441338/" class="dropdown-item" target="_blank">
+                  <i class="bi bi-person"></i> Edit Clients
+                </a>
+              </li>
+              <li>
+                <a href="https://mdf-public-adjuster.monday.com/boards/8792441338/" class="dropdown-item" target="_blank">
+                  <i class="bi bi-building"></i> Edit Insurance Companies
+                </a>
+              </li>
+              <li>
+                <a href="https://mdf-public-adjuster.monday.com/boards/8792441338/" class="dropdown-item" target="_blank">
+                  <i class="bi bi-people"></i> Edit Contacts
+                </a>
+              </li>
+              <li>
+                <a href="https://mdf-public-adjuster.monday.com/boards/8778422410/" class="dropdown-item" target="_blank">
+                  <i class="bi bi-funnel"></i> Edit Leads
+                </a>
+              </li>
+              <li>
+                <a href="https://mdf-public-adjuster.monday.com/boards/8769212922/" class="dropdown-item" target="_blank">
+                  <i class="bi bi-file-earmark"></i> Edit Documents
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+        
+        <!-- Right Side Menu (if needed) -->
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person-circle"></i> Account
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Settings</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
