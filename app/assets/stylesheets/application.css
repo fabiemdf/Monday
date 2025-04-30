@@ -187,3 +187,8 @@
 .mb-4 {
   margin-bottom: 1.5rem;
 }
+
+/*
+ *= require_tree .
+ *= require_self
+ */

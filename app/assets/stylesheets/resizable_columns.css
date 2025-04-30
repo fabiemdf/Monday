@@ -1,0 +1,52 @@
+/* app/assets/stylesheets/resizable_columns.css */
+
+/* Table styling for resizable columns */
+.table-resizable {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.table-resizable th {
+  position: relative;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Column resizer styling */
+.column-resizer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 5px;
+  height: 100%;
+  background-color: transparent;
+  cursor: col-resize;
+  user-select: none;
+  touch-action: none;
+}
+
+.column-resizer:hover,
+.column-resizer:active {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* When resizing is active */
+body.resizing-columns {
+  cursor: col-resize;
+  user-select: none;
+}
+
+body.resizing-columns .table-responsive {
+  overflow-x: hidden; /* Prevent scrolling while resizing */
+}
+
+/* Ensure the last column (Actions) doesn't get a resizer */
+.table-resizable th:last-child .column-resizer {
+  display: none;
+}
+
+/* Make sure the table container allows horizontal scrolling */
+.table-responsive {
+  overflow-x: auto;
+} 
