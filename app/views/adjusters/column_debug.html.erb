@@ -1,0 +1,50 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Adjusters Board Columns</h1>
+    <%= link_to adjusters_path, class: "btn btn-outline-secondary" do %>
+      <i class="bi bi-arrow-left"></i> Back to Adjusters
+    <% end %>
+  </div>
+
+  <div class="card">
+    <div class="card-header bg-info text-white">
+      <h3 class="mb-0">Column Information</h3>
+    </div>
+    <div class="card-body">
+      <% if @columns.any? %>
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Type</th>
+                <th>Settings</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @columns.each do |column| %>
+                <tr>
+                  <td><code><%= column["id"] %></code></td>
+                  <td><%= column["title"] %></td>
+                  <td><span class="badge bg-info"><%= column["type"] %></span></td>
+                  <td>
+                    <% if column["settings_str"].present? %>
+                      <pre class="mb-0"><%= JSON.pretty_generate(JSON.parse(column["settings_str"])) rescue column["settings_str"] %></pre>
+                    <% else %>
+                      <em class="text-muted">No settings</em>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <div class="alert alert-warning">
+          No columns found or error fetching column data.
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div> 

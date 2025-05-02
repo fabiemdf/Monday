@@ -1,0 +1,106 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Employees</h1>
+    <div>
+      <%= link_to column_debug_employees_path, class: "btn btn-outline-info me-2" do %>
+        <i class="bi bi-bug"></i> Debug Columns
+      <% end %>
+      <a href="https://mdf-public-adjuster.monday.com/boards/<%= ENV['MONDAY_EMPLOYEES_BOARD_ID'] %>" class="btn btn-primary" target="_blank">
+        <i class="bi bi-pencil"></i> Edit in Monday.com
+      </a>
+    </div>
+  </div>
+
+  <!-- Debug Information -->
+  <% if Rails.env.development? %>
+    <%= render partial: "shared/monday_debug", locals: { data: @employees_data } %>
+  <% end %>
+
+  <!-- Employees List -->
+  <% if @employees_by_group.any? %>
+    <div class="accordion" id="employeesAccordion">
+      <% @sorted_groups.each_with_index do |group_name, index| %>
+        <% if @employees_by_group[group_name].present? %>
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="heading<%= index %>">
+              <button class="accordion-button <%= index.zero? ? '' : 'collapsed' %>" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%= index %>">
+                <%= group_name %> (<%= @employees_by_group[group_name].size %>)
+              </button>
+            </h2>
+            <div id="collapse<%= index %>" class="accordion-collapse collapse <%= index.zero? ? 'show' : '' %>" data-bs-parent="#employeesAccordion">
+              <div class="accordion-body p-0">
+                <div class="table-responsive">
+                  <table class="table table-hover mb-0">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Position</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% @employees_by_group[group_name].each do |employee| %>
+                        <tr>
+                          <td><%= link_to employee["name"], employee_path(employee["id"]), class: "text-decoration-none" %></td>
+                          <td>
+                            <% position_column = employee["column_values"].find { |col| col["type"] == "text" } %>
+                            <%= position_column&.dig("text") || "N/A" %>
+                          </td>
+                          <td>
+                            <% phone_column = employee["column_values"].find { |col| col["type"] == "phone" } %>
+                            <% phone = phone_column&.dig("text") %>
+                            <% if phone.present? %>
+                              <a href="tel:<%= phone %>" class="text-decoration-none"><%= format_phone_number(phone) %></a>
+                            <% else %>
+                              N/A
+                            <% end %>
+                          </td>
+                          <td>
+                            <% email_column = employee["column_values"].find { |col| col["type"] == "email" } %>
+                            <%= format_email(email_column&.dig("text")) %>
+                          </td>
+                          <td>
+                            <% status_column = employee["column_values"].find { |col| col["id"] == "status" } %>
+                            <% status = status_column&.dig("text") || "Unknown" %>
+                            <span class="badge <%= status_badge_class(status) %>"><%= status %></span>
+                          </td>
+                          <td>
+                            <div class="btn-group btn-group-sm">
+                              <%= link_to employee_path(employee["id"]), class: "btn btn-outline-primary", title: "View" do %>
+                                <i class="bi bi-eye"></i>
+                              <% end %>
+                              <%= link_to edit_employee_path(employee["id"]), class: "btn btn-outline-warning", title: "Edit Locally" do %>
+                                <i class="bi bi-pencil"></i>
+                              <% end %>
+                              <a href="https://mdf-public-adjuster.monday.com/boards/<%= ENV['MONDAY_EMPLOYEES_BOARD_ID'] %>/pulses/<%= employee["id"] %>" 
+                                 class="btn btn-outline-secondary" 
+                                 target="_blank"
+                                 title="Edit in Monday.com">
+                                <i class="bi bi-box-arrow-up-right"></i>
+                              </a>
+                            </div>
+                          </td>
+                        </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="alert alert-info">
+      <h4>No Employees Found</h4>
+      <p>There are no employees in the system or there was an error fetching the data.</p>
+      <a href="https://mdf-public-adjuster.monday.com/boards/<%= ENV['MONDAY_EMPLOYEES_BOARD_ID'] %>" class="btn btn-primary mt-2" target="_blank">
+        Add Employees in Monday.com
+      </a>
+    </div>
+  <% end %>
+</div> 

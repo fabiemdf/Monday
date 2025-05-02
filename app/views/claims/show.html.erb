@@ -85,11 +85,11 @@
                     <td><%= get_column_text(@claim, "dropdown_mkpbw5qq") %></td>
                   </tr>
                   <tr>
-                    <th>Client Name</th>
+                    <th>Insurance Rep</th>
                     <td><%= get_column_text(@claim, "text_mkpb65jx") %></td>
                   </tr>
                   <tr>
-                    <th>Assigned To</th>
+                    <th>Adjuster</th>
                     <td><%= get_column_text(@claim, "text_mkpb3en0") %></td>
                   </tr>
                   <tr>
@@ -286,11 +286,42 @@
             </div>
             
             <p><strong>Notes:</strong></p>
-            <div class="p-3 bg-light rounded">
+            <div class="p-3 bg-light rounded mb-3">
               <%= simple_format(get_column_text(@claim, "long_text_mkpbngk3")) %>
+            </div>
+
+            <!-- Added: Linked Notes from Monday.com -->
+               <pre><%= @linked_notes.inspect %></pre>
+            <p><strong>Linked Notes (Monday.com):</strong></p>
+            <div class="p-3 bg-light rounded">
+              <%= simple_format(get_column_text(@claim, "lookup_mkq8vjgs")) %>
             </div>
           </div>
         </div>
+
+        
+
+<!-- Linked Notes Section (Monday.com) -->
+<% if @linked_notes.present? %>
+  <div class="card mb-4">
+    <div class="card-header">
+      <h3>File Notes</h3>
+    </div>
+    <div class="card-body">
+      <% @linked_notes.each do |note| %>
+        <% if note[:notes].present? %>
+          <div class="p-3 bg-light rounded mb-2">
+            <strong><%= note[:name] %></strong><br>
+            <strong>Created On:</strong>
+            <%= note[:created_on].present? ? Date.parse(note[:created_on]).strftime("%b %-d, %Y") : "N/A" %><br>
+            <strong>Entered By:</strong> <%= note[:entered_by].presence || "N/A" %><br>
+            <%= simple_format(note[:notes]) %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+<% end %>
 
         <!-- Additional Information -->
         <div class="card shadow-sm mb-4">
@@ -331,7 +362,7 @@
           <h3 class="mb-0">Debug Information</h3>
         </div>
         <div class="card-body">
-          <pre class="bg-light p-3"><%= JSON.pretty_generate(@claim) rescue @claim.inspect %></pre>
+          <pre class="bg-light p-3"><%= JSON.pretty_generate(@claim) %></pre>
         </div>
       </div>
     <% end %>

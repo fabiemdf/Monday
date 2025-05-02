@@ -227,6 +227,25 @@ end
           end
         end
 
+        # Find the board relation column for notes (replace with your actual column ID if needed)
+        notes_relation_column = @claim["column_values"].find { |col| col["id"] == "board_relation_mkq8n3ma" }
+
+        linked_note_ids = []
+        if notes_relation_column && notes_relation_column["value"].present?
+          begin
+            relation_value = JSON.parse(notes_relation_column["value"])
+            if relation_value["linkedPulseIds"] && relation_value["linkedPulseIds"].any?
+              linked_note_ids = relation_value["linkedPulseIds"].map { |h| h["linkedPulseId"] }
+            end
+          rescue => e
+            Rails.logger.error("Error parsing notes relation: #{e.message}")
+          end
+        end
+
+        # Fetch the notes from the linked items
+        @linked_notes = MondayApiService.fetch_notes_for_linked_items(linked_note_ids, "text_mkq7a7ny")
+        Rails.logger.debug "SET @linked_notes: #{@linked_notes.inspect}"
+
         # Render the show view
         render :show
       else

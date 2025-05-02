@@ -24,4 +24,27 @@ Rails.application.routes.draw do
       get :columns
     end
   end
+  Rails.application.routes.draw do
+    # ... existing routes ...
+
+    resources :insurance_representatives do
+      get :column_debug, on: :collection
+    end
+  end
+  Rails.application.routes.draw do
+    # ... existing routes ...
+
+    resources :adjusters do
+      get :column_debug, on: :collection
+    end
+  end
+  Rails.application.routes.draw do
+    # ... existing routes ...
+
+    resources :employees do
+      collection do
+        get "column_debug"
+      end
+    end
+  end
 end

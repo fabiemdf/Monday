@@ -1,0 +1,81 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Edit Employee: <%= @employee["name"] %></h1>
+    <div>
+      <%= link_to employee_path(@employee["id"]), class: "btn btn-outline-secondary" do %>
+        <i class="bi bi-x-lg"></i> Cancel
+      <% end %>
+    </div>
+  </div>
+
+  <% if flash[:error].present? %>
+    <div class="alert alert-danger">
+      <%= flash[:error] %>
+    </div>
+  <% end %>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <%= form_with(scope: :employee, url: employee_path(@employee["id"]), method: :patch, local: true) do |f| %>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <%= f.label :name, class: "form-label" %>
+              <%= f.text_field :name, value: @employee["name"], class: "form-control" %>
+            </div>
+
+            <div class="mb-3">
+              <%= f.label :email, class: "form-label" %>
+              <% email_column = @employee["column_values"].find { |col| col["id"] == "email_mkqhvt92" } %>
+              <%= f.email_field :email, value: email_column&.dig("text"), class: "form-control" %>
+            </div>
+
+            <div class="mb-3">
+              <%= f.label :phone, class: "form-label" %>
+              <% phone_column = @employee["column_values"].find { |col| col["id"] == "phone_mkqhkyce" } %>
+              <%= f.telephone_field :phone, value: phone_column&.dig("text"), class: "form-control" %>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="mb-3">
+              <%= f.label :position, class: "form-label" %>
+              <% position_column = @employee["column_values"].find { |col| col["id"] == "text_mkqh1hrb" } %>
+              <%= f.text_field :position, value: position_column&.dig("text"), class: "form-control" %>
+            </div>
+
+            <div class="mb-3">
+              <%= f.label :status, class: "form-label" %>
+              <% status_column = @employee["column_values"].find { |col| col["id"] == "status" } %>
+              <%= f.select :status, 
+                  ["Active", "Inactive", "On Leave"], 
+                  { selected: status_column&.dig("text") },
+                  { class: "form-select" } %>
+            </div>
+
+            <div class="mb-3">
+              <%= f.label :notes, class: "form-label" %>
+              <% notes_column = @employee["column_values"].find { |col| col["type"] == "long_text" } %>
+              <%= f.text_area :notes, value: notes_column&.dig("text"), class: "form-control", rows: 5 %>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-end mt-4">
+          <%= f.submit "Update Employee", class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <% if Rails.env.development? %>
+    <div class="card mt-4">
+      <div class="card-header">
+        <h3 class="mb-0">Debug Information</h3>
+      </div>
+      <div class="card-body">
+        <pre><%= JSON.pretty_generate(@employee) %></pre>
+      </div>
+    </div>
+  <% end %>
+</div> 

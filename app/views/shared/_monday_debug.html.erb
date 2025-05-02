@@ -1,0 +1,26 @@
+<div class="card mb-4 border-danger">
+  <div class="card-header bg-danger text-white">
+    <h3 class="mb-0">Debug Information</h3>
+  </div>
+  <div class="card-body">
+    <h5>API Response Overview:</h5>
+    <ul>
+      <li><strong>API Response Keys:</strong> <%= data.present? ? data.keys.join(', ') : 'No response data' %></li>
+      <li><strong>Board ID:</strong> <%= ENV['MONDAY_INSURANCE_REPS_BOARD_ID'] || 'Not set' %></li>
+      <li><strong>Data Present:</strong> <%= data.present? && data.dig("data").present? ? 'Yes' : 'No' %></li>
+      <li><strong>Boards Present:</strong> <%= data.dig("data", "boards").present? ? 'Yes' : 'No' %></li>
+      <li><strong>Items Count:</strong> <%= data.dig("data", "boards", 0, "items_page", "items")&.length || 'No items' %></li>
+      <li><strong>Groups Count:</strong> <%= data.dig("data", "boards", 0, "groups")&.length || 'No groups' %></li>
+    </ul>
+
+    <% if data.present? && data["errors"].present? %>
+      <h5 class="text-danger">API Errors:</h5>
+      <pre class="bg-light p-3"><%= JSON.pretty_generate(data["errors"]) rescue data["errors"].inspect %></pre>
+    <% end %>
+
+    <details>
+      <summary>View Full API Response</summary>
+      <pre class="bg-light p-3"><%= JSON.pretty_generate(data) rescue data.inspect %></pre>
+    </details>
+  </div>
+</div> 

@@ -1,0 +1,194 @@
+<div class="container mt-4">
+  <% if @adjuster.present? %>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1><%= @adjuster["name"] %></h1>
+      <div>
+        <%= link_to adjusters_path, class: "btn btn-outline-secondary me-2" do %>
+          <i class="bi bi-arrow-left"></i> Back to Adjusters
+        <% end %>
+        <a href="https://mdf-public-adjuster.monday.com/boards/<%= ENV['MONDAY_ADJUSTERS_BOARD_ID'] %>/pulses/<%= @adjuster["id"] %>" class="btn btn-primary" target="_blank">
+          <i class="bi bi-pencil"></i> Edit in Monday.com
+        </a>
+      </div>
+    </div>
+
+    <% 
+      status_column = @adjuster["column_values"].find { |col| col["id"] == "status" }
+      status = status_column && status_column["text"].present? ? status_column["text"] : "Unknown"
+      status_class = status_badge_class(status)
+    %>
+
+    <!-- Status Badge -->
+    <div class="mb-4">
+      <span class="badge <%= status_class %> fs-5"><%= status %></span>
+    </div>
+
+    <div class="row">
+      <!-- Main Adjuster Information -->
+      <div class="col-md-8">
+        <div class="card shadow-sm mb-4">
+          <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">Contact Information</h3>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <table class="table table-borderless">
+                  <tr>
+                    <th>Name</th>
+                    <td><%= @adjuster["name"] %></td>
+                  </tr>
+                  <tr>
+                    <th>Company</th>
+                    <% 
+                      company_column = @adjuster["column_values"].find { |col| col["type"] == "text" }
+                      company = company_column && company_column["text"].present? ? company_column["text"] : "N/A"
+                    %>
+                    <td><%= company %></td>
+                  </tr>
+                  <tr>
+                    <th>Phone</th>
+                    <% 
+                      phone_column = @adjuster["column_values"].find { |col| col["type"] == "phone" }
+                      phone = phone_column && phone_column["text"].present? ? phone_column["text"] : "N/A"
+                    %>
+                    <td>
+                      <% if phone != "N/A" %>
+                        <a href="tel:<%= phone %>"><%= format_phone_number(phone) %></a>
+                      <% else %>
+                        <%= phone %>
+                      <% end %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Email</th>
+                    <% 
+                      email_column = @adjuster["column_values"].find { |col| col["type"] == "email" }
+                      email = email_column && email_column["text"].present? ? email_column["text"] : "N/A"
+                    %>
+                    <td><%= format_email(email) %></td>
+                  </tr>
+                </table>
+              </div>
+              <div class="col-md-6">
+                <table class="table table-borderless">
+                  <tr>
+                    <th>Status</th>
+                    <td><span class="badge <%= status_class %>"><%= status %></span></td>
+                  </tr>
+                  <tr>
+                    <th>Group</th>
+                    <td><%= @adjuster.dig("group", "title") || "N/A" %></td>
+                  </tr>
+                  <tr>
+                    <th>Last Update</th>
+                    <td><%= @adjuster["updated_at"] ? Time.at(@adjuster["updated_at"].to_i/1000).strftime("%B %-d, %Y") : "N/A" %></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notes Section -->
+        <div class="card shadow-sm mb-4">
+          <div class="card-header bg-success text-white">
+            <h3 class="mb-0">Notes</h3>
+          </div>
+          <div class="card-body">
+            <% 
+              notes_column = @adjuster["column_values"].find { |col| col["type"] == "long_text" }
+              notes = notes_column && notes_column["text"].present? ? notes_column["text"] : "No notes available."
+            %>
+            <div class="p-3 bg-light rounded">
+              <%= simple_format(notes) %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar Information -->
+      <div class="col-md-4">
+        <!-- Related Claims -->
+        <div class="card shadow-sm mb-4">
+          <div class="card-header bg-secondary text-white">
+            <h3 class="mb-0">Related Claims</h3>
+          </div>
+          <div class="card-body">
+            <% if @related_claims.present? && @related_claims.any? %>
+              <div class="list-group">
+                <% @related_claims.each do |claim| %>
+                  <%= link_to claim_path(claim["id"]), class: "list-group-item list-group-item-action" do %>
+                    <div class="d-flex w-100 justify-content-between">
+                      <h5 class="mb-1"><%= claim["name"] %></h5>
+                      <% 
+                        claim_status_column = claim["column_values"].find { |col| col["id"] == "status" }
+                        claim_status = claim_status_column && claim_status_column["text"].present? ? claim_status_column["text"] : "Unknown"
+                        claim_status_class = status_badge_class(claim_status)
+                      %>
+                      <span class="badge <%= claim_status_class %>"><%= claim_status %></span>
+                    </div>
+                    <small class="text-muted">Last updated: <%= Time.at(claim["updated_at"].to_i/1000).strftime("%B %-d, %Y") rescue "N/A" %></small>
+                  <% end %>
+                <% end %>
+              </div>
+            <% else %>
+              <p class="text-muted">No claims associated with this adjuster.</p>
+            <% end %>
+          </div>
+        </div>
+
+        <!-- Additional Information -->
+        <div class="card shadow-sm mb-4">
+          <div class="card-header bg-dark text-white">
+            <h3 class="mb-0">Additional Information</h3>
+          </div>
+          <div class="card-body">
+            <% 
+              additional_columns = @adjuster["column_values"].select do |col| 
+                col["text"].present? &&
+                !["status", "phone", "email", "long_text"].include?(col["type"]) &&
+                !col["type"].to_s.downcase.include?("company") &&
+                !col["type"].to_s.downcase.include?("phone") &&
+                !col["type"].to_s.downcase.include?("email") &&
+                !col["type"].to_s.downcase.include?("notes")
+              end
+            %>
+            
+            <% if additional_columns.any? %>
+              <table class="table table-sm">
+                <% additional_columns.each do |column| %>
+                  <tr>
+                    <th><%= column["id"] %></th>
+                    <td><%= column["text"] %></td>
+                  </tr>
+                <% end %>
+              </table>
+            <% else %>
+              <p class="text-muted">No additional information available.</p>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Debug Information -->
+    <% if Rails.env.development? %>
+      <div class="card mt-4">
+        <div class="card-header bg-light">
+          <h3 class="mb-0">Debug Information</h3>
+        </div>
+        <div class="card-body">
+          <pre class="bg-light p-3"><%= JSON.pretty_generate(@adjuster) %></pre>
+        </div>
+      </div>
+    <% end %>
+
+  <% else %>
+    <div class="alert alert-danger">
+      <h3>Adjuster not found</h3>
+      <p>The requested adjuster could not be found or there was an error retrieving the data.</p>
+      <%= link_to "Return to Adjusters List", adjusters_path, class: "btn btn-primary mt-3" %>
+    </div>
+  <% end %>
+</div> 

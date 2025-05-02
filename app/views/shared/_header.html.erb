@@ -53,6 +53,21 @@
                   <i class="bi bi-file-earmark"></i> Documents
                 <% end %>
               </li>
+              <li>
+                <%= link_to insurance_representatives_path, class: "dropdown-item", 'data-turbo': 'false' do %>
+                  <i class="bi bi-person-badge"></i> Insurance Representatives
+                <% end %>
+              </li>
+              <li>
+                <%= link_to adjusters_path, class: "dropdown-item", 'data-turbo': 'false' do %>
+                  <i class="bi bi-person-workspace"></i> Adjusters
+                <% end %>
+              </li>
+              <li>
+                <%= link_to employees_path, class: "dropdown-item", 'data-turbo': 'false' do %>
+                  <i class="bi bi-people-fill"></i> Employees
+                <% end %>
+              </li>
             </ul>
           </li>
           
@@ -129,6 +144,21 @@
               <li>
                 <a href="https://mdf-public-adjuster.monday.com/boards/8769212922/" class="dropdown-item" target="_blank">
                   <i class="bi bi-file-earmark"></i> Edit Documents
+                </a>
+              </li>
+              <li>
+                <a href="https://mdf-public-adjuster.monday.com/boards/<%= ENV['MONDAY_INSURANCE_REPS_BOARD_ID'] %>/" class="dropdown-item" target="_blank">
+                  <i class="bi bi-person-badge"></i> Edit Insurance Representatives
+                </a>
+              </li>
+              <li>
+                <a href="https://mdf-public-adjuster.monday.com/boards/<%= ENV['MONDAY_ADJUSTERS_BOARD_ID'] %>/" class="dropdown-item" target="_blank">
+                  <i class="bi bi-person-workspace"></i> Edit Adjusters
+                </a>
+              </li>
+              <li>
+                <a href="https://mdf-public-adjuster.monday.com/boards/<%= ENV['MONDAY_EMPLOYEES_BOARD_ID'] %>/" class="dropdown-item" target="_blank">
+                  <i class="bi bi-people-fill"></i> Edit Employees
                 </a>
               </li>
             </ul>

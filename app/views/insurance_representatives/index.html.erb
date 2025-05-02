@@ -1,0 +1,100 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Insurance Representatives</h1>
+    <div>
+      <%= link_to column_debug_insurance_representatives_path, class: "btn btn-outline-info me-2" do %>
+        <i class="bi bi-bug"></i> Debug Columns
+      <% end %>
+      <a href="https://mdf-public-adjuster.monday.com/boards/<%= ENV['MONDAY_INSURANCE_REPS_BOARD_ID'] %>" class="btn btn-primary" target="_blank">
+        <i class="bi bi-pencil"></i> Edit in Monday.com
+      </a>
+    </div>
+  </div>
+
+  <!-- Debug Information -->
+  <% if Rails.env.development? %>
+    <%= render partial: "shared/monday_debug", locals: { data: @reps_data } %>
+  <% end %>
+
+  <!-- Representatives List -->
+  <% if @reps_by_group.any? %>
+    <div class="accordion" id="repsAccordion">
+      <% @sorted_groups.each_with_index do |group_name, index| %>
+        <% if @reps_by_group[group_name].present? %>
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="heading<%= index %>">
+              <button class="accordion-button <%= index.zero? ? '' : 'collapsed' %>" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%= index %>">
+                <%= group_name %> (<%= @reps_by_group[group_name].size %>)
+              </button>
+            </h2>
+            <div id="collapse<%= index %>" class="accordion-collapse collapse <%= index.zero? ? 'show' : '' %>" data-bs-parent="#repsAccordion">
+              <div class="accordion-body p-0">
+                <div class="table-responsive">
+                  <table class="table table-hover mb-0">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Company</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% @reps_by_group[group_name].each do |rep| %>
+                        <tr>
+                          <td><%= link_to rep["name"], insurance_representative_path(rep["id"]), class: "text-decoration-none" %></td>
+                          <td>
+                            <% company_column = rep["column_values"].find { |col| col["type"] == "text" } %>
+                            <%= company_column&.dig("text") || "N/A" %>
+                          </td>
+                          <td>
+                            <% phone_column = rep["column_values"].find { |col| col["type"] == "phone" } %>
+                            <% phone = phone_column&.dig("text") %>
+                            <% if phone.present? %>
+                              <a href="tel:<%= phone %>" class="text-decoration-none"><%= format_phone_number(phone) %></a>
+                            <% else %>
+                              N/A
+                            <% end %>
+                          </td>
+                          <td>
+                            <% email_column = rep["column_values"].find { |col| col["type"] == "email" } %>
+                            <%= format_email(email_column&.dig("text")) %>
+                          </td>
+                          <td>
+                            <% status_column = rep["column_values"].find { |col| col["id"] == "status" } %>
+                            <% status = status_column&.dig("text") || "Unknown" %>
+                            <span class="badge <%= status_badge_class(status) %>"><%= status %></span>
+                          </td>
+                          <td>
+                            <div class="btn-group btn-group-sm">
+                              <%= link_to insurance_representative_path(rep["id"]), class: "btn btn-outline-primary" do %>
+                                <i class="bi bi-eye"></i>
+                              <% end %>
+                              <a href="https://mdf-public-adjuster.monday.com/boards/<%= ENV['MONDAY_INSURANCE_REPS_BOARD_ID'] %>/pulses/<%= rep["id"] %>" class="btn btn-outline-secondary" target="_blank">
+                                <i class="bi bi-pencil"></i>
+                              </a>
+                            </div>
+                          </td>
+                        </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="alert alert-info">
+      <h4>No Insurance Representatives Found</h4>
+      <p>There are no insurance representatives in the system or there was an error fetching the data.</p>
+      <a href="https://mdf-public-adjuster.monday.com/boards/<%= ENV['MONDAY_INSURANCE_REPS_BOARD_ID'] %>" class="btn btn-primary mt-2" target="_blank">
+        Add Representatives in Monday.com
+      </a>
+    </div>
+  <% end %>
+</div> 
